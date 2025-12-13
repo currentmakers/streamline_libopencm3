@@ -45,5 +45,4 @@ BMP_PORT	?=
 # texane/stlink specific variables
 #STLINK_PORT	?= :4242
 
-
 include ../../rules.mk
