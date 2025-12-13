@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2009 Uwe Hermann <uwe@hermann-uwe.de>
  * Copyright (C) 2011 Stephen Caudle <scaudle@doceme.com>
+ * Copyright (C) 2025 CurrentMakers <lth@currentmakers.com>
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,15 +19,15 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Linker script for ST STM32F4DISCOVERY (STM32F407VG, 1024K flash, 128K RAM). */
+/* Linker script for Streamline sl_mcu_f407. */
 
 /* Define memory regions. */
 MEMORY
 {
-	rom (rx) : ORIGIN = 0x08000000, LENGTH = 512K
-	ram (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
+    rom        (rx)    : ORIGIN = 0x8000000,    LENGTH = 512K
+    ccmram    (xrw)    : ORIGIN = 0x10000000,   LENGTH = 64K
+    ram       (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
 }
 
 /* Include the common ld script. */
 INCLUDE cortex-m-generic.ld
-

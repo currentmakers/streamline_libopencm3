@@ -4,6 +4,7 @@
 ## Copyright (C) 2009 Uwe Hermann <uwe@hermann-uwe.de>
 ## Copyright (C) 2010 Piotr Esden-Tempski <piotr@esden.net>
 ## Copyright (C) 2013 Frantisek Burian <BuFran@seznam.cz>
+## Copyright (C) 2025 CurrentMakers <lth@currentmakers.com>
 ##
 ## This library is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU Lesser General Public License as published by
@@ -57,7 +58,7 @@ ifeq ($(strip $(OPENCM3_DIR)),)
 # user has not specified the library path, so we try to detect it
 
 # where we search for the library
-LIBPATHS := ./libopencm3 ../../../libopencm3 ../../../../../libopencm3
+LIBPATHS := ./libopencm3 ../../libopencm3 ../../../libopencm3
 
 OPENCM3_DIR := $(wildcard $(LIBPATHS:=/locm3.sublime-project))
 OPENCM3_DIR := $(firstword $(dir $(OPENCM3_DIR)))
