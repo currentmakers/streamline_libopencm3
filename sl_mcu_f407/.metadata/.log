@@ -1,0 +1,15 @@
+!SESSION 2025-12-12 16:31:46.983 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -data /home/lth/src/streamline_libopencm3/sl_mcu_f407
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-12-12 16:32:09.005
+!MESSAGE Log4j2 initialized with config file /home/lth/src/streamline_libopencm3/sl_mcu_f407/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-12-12 16:32:13.824
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-12-12 16:33:05.594
+!MESSAGE Indexed 'test1' (3 sources, 53 headers) in 1.16 sec: 1,954 declarations; 2,863 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.042%)
