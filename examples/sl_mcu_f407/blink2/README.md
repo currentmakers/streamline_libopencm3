@@ -1,9 +1,7 @@
 # README
 
-This is the smallest-possible example program using libopencm3.
-
-It's intended for the sl_mcu_stm32f407 eval board. It should blink
-the LEDs on the board.
+This is a development of blink1 adding a systick timer and use that to control the blink, 
+rather than using a bunch of NOP's.
 
 ## Board connections
 
