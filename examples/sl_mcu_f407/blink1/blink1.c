@@ -1,5 +1,5 @@
 /*
- * This file is part of the libopencm3 project.
+ * First STM32World libopencm3 demo
  *
  * Copyright (C) 2009 Uwe Hermann <uwe@hermann-uwe.de>
  * Copyright (C) 2011 Damjan Marion <damjan.marion@gmail.com>

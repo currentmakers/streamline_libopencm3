@@ -66,7 +66,7 @@ int main(void) {
 
         if (now >= next_blink) {
             gpio_toggle(GPIOC, GPIO13);
-            next_blink = now + 500;
+            next_blink = now + 100;
         }
 
     }
