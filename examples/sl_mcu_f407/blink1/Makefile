@@ -10,3 +10,4 @@ BINARY = blink1
 LDSCRIPT = ../sl_mcu_f407.ld
 
 include ../Makefile.include
+

@@ -23,26 +23,19 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 
-/* Set STM32 to 168 MHz. */
-static void clock_setup(void) {
-
-    /* The Streamline F407 use a 16 MHz crystal and it can run up to 168 MHz */
-    rcc_clock_setup_pll(&rcc_hse_16mhz_3v3[RCC_CLOCK_3V3_168MHZ]);
+static void gpio_setup(void) {
 
     /* Enable GPIOC clock. */
     rcc_periph_clock_enable(RCC_GPIOC);
-}
 
-static void gpio_setup(void) {
     /* Set GPIO12-15 (in GPIO port D) to 'output push-pull'. */
     gpio_mode_setup(GPIOC, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13);
     gpio_set_output_options(GPIOC, GPIO_OTYPE_OD, GPIO_OSPEED_2MHZ, GPIO13);
+
 }
 
 int main(void) {
-    int i;
 
-    clock_setup();
     gpio_setup();
 
     /* Set two LEDs for wigwag effect when toggling. */
@@ -52,7 +45,7 @@ int main(void) {
     while (1) {
         /* Toggle LEDs. */
         gpio_toggle(GPIOC, GPIO13);
-        for (i = 0; i < 16000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             /* Wait a bit. */
             __asm__("nop");
         }
@@ -60,3 +53,4 @@ int main(void) {
 
     return 0;
 }
+
