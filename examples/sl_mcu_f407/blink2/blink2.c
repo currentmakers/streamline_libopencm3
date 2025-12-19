@@ -31,11 +31,13 @@ static void clock_setup(void) {
     /* Start counting. */
     systick_counter_enable();
 
-    /* Enable GPIOC clock. */
-    rcc_periph_clock_enable(RCC_GPIOC);
 }
 
 static void gpio_setup(void) {
+
+    /* Enable GPIOC clock. */
+    rcc_periph_clock_enable(RCC_GPIOC);
+
     /* Set GPIO12-15 (in GPIO port D) to 'output push-pull'. */
     gpio_mode_setup(GPIOC, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13);
     gpio_set_output_options(GPIOC, GPIO_OTYPE_OD, GPIO_OSPEED_2MHZ, GPIO13);
@@ -66,7 +68,7 @@ int main(void) {
 
         if (now >= next_blink) {
             gpio_toggle(GPIOC, GPIO13);
-            next_blink = now + 100;
+            next_blink = now + 500;
         }
 
     }

@@ -33,7 +33,7 @@ endif
 # OpenOCD specific variables
 
 OOCD		?= openocd
-OOCD_INTERFACE	?= stlink
+OOCD_INTERFACE	?= cmsis-dap
 OOCD_TARGET	?= stm32f4x
 
 ################################################################################
