@@ -16,7 +16,6 @@
 #include <errno.h>
 
 // stdio prototypes
-int _kill(int pid, int sig);
 int _getpid(void);
 int _close(int file);
 int _write(int file, char *ptr, int len);
@@ -25,6 +24,7 @@ int _fstat(int file, struct stat *st);
 int _lseek(int file, int ptr, int dir);
 int _isatty(int file);
 void *_sbrk(ptrdiff_t incr);
+int kill(int pid, int sig);
 
 volatile uint32_t systick = 0;
 
@@ -163,7 +163,7 @@ int _isatty(int file) {
     return 1;
 }
 
-int _kill(int pid, int sig) {
+int kill(int pid, int sig) {
     (void) pid;
     (void) sig;
     errno = EINVAL;
