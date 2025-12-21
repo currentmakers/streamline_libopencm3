@@ -32,7 +32,7 @@ int main(void) {
         /* Toggle LEDs. */
         gpio_toggle(GPIOC, GPIO13);
 
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 100000; i++) {
             /* Wait a bit. */
             __asm__("nop");
         }
