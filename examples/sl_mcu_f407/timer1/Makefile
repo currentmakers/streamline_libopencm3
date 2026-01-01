@@ -18,11 +18,8 @@
 ## along with this library.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-BINARY = uart1
+BINARY = timer1
 
 LDSCRIPT = ../sl_mcu_f407.ld
 
-OBJS += stubs.o
-
 include ../Makefile.include
-
