@@ -10,22 +10,15 @@
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/usart.h>
+#include <libopencm3/stm32/timer.h>
 
 #include <sys/stat.h>
 #include <stdio.h>
-#include <errno.h>
 
 // stdio prototypes
-int _getpid(void);
-int _close(int file);
 int _write(int file, char *ptr, int len);
-int _read(int file, char *ptr, int len);
-int _fstat(int file, struct stat *st);
-int _lseek(int file, int ptr, int dir);
-int _isatty(int file);
-void *_sbrk(ptrdiff_t incr);
-int kill(int pid, int sig);
 
+// Global systick variable - incremented every 1 ms
 volatile uint32_t systick = 0;
 
 /* Set STM32 to 168 MHz using a 16 MHz HSE. */
@@ -38,7 +31,7 @@ static void clock_setup(void) {
 
     /* 21000000/21000 = 1000 overflows per second - every 1ms one interrupt */
     /* SysTick interrupt every N clock pulses: set reload to N-1 */
-    systick_set_reload(20999);
+    systick_set_reload(21000 - 1);
 
     systick_interrupt_enable();
 
@@ -51,9 +44,11 @@ static void clock_setup(void) {
     rcc_periph_clock_enable(RCC_GPIOC);
 
     rcc_periph_clock_enable(RCC_USART1);
+    rcc_periph_clock_enable(RCC_TIM2);
 }
 
 static void gpio_setup(void) {
+
     /* Set GPIO12-15 (in GPIO port D) to 'output push-pull'. */
     gpio_mode_setup(GPIOC, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO13);
     gpio_set_output_options(GPIOC, GPIO_OTYPE_OD, GPIO_OSPEED_2MHZ, GPIO13);
@@ -63,6 +58,7 @@ static void gpio_setup(void) {
 
     /* Set PA9 and PA10 to AF7 (usart1) */
     gpio_set_af(GPIOA, GPIO_AF7, GPIO9 | GPIO10);
+
 }
 
 static void usart_setup(void) {
@@ -78,11 +74,33 @@ static void usart_setup(void) {
     usart_enable(USART1);
 }
 
+static void tim_setup(void) {
+
+    // Enable tim2 interrupt
+    nvic_enable_irq(NVIC_TIM2_IRQ);
+
+    // Set the prescaler to get down to 1 MHz
+    timer_set_prescaler(TIM2, 8400 - 1);
+
+    timer_set_period(TIM2, 5000 - 1);
+
+    timer_enable_counter(TIM2);
+
+    timer_enable_irq(TIM2, TIM_DIER_CC1IE);
+
+}
+
+void tim2_isr(void) {
+    timer_clear_flag(TIM2, TIM_DIER_CC1IE);
+    gpio_toggle(GPIOC, GPIO13);
+}
+
 int main(void) {
     // Setup clocks and gpio
     clock_setup();
     gpio_setup();
     usart_setup();
+    tim_setup();
 
     printf("\n\n\nStarting\n");
 
@@ -94,12 +112,13 @@ int main(void) {
 
     /* Blink the LEDs (PD12, PD13, PD14 and PD15) on the board. */
     while (1) {
+
         now = systick;
 
-        if (now >= next_blink) {
-            gpio_toggle(GPIOC, GPIO13);
-            next_blink = now + 500;
-        }
+        // if (now >= next_blink) {
+        //     gpio_toggle(GPIOC, GPIO13);
+        //     next_blink = now + 500;
+        // }
 
         if (now >= next_tick) {
             printf("Tick %lu (loop = %lu)\n", now / 1000, loop);
@@ -108,6 +127,7 @@ int main(void) {
         }
 
         ++loop;
+
     }
 
     return 0;
@@ -133,69 +153,12 @@ int _write(int fd, char *ptr, int len) {
         return -1;
     }
     while (*ptr && (i < len)) {
-        usart_send_blocking(USART1, *ptr);
         if (*ptr == '\n') {
             usart_send_blocking(USART1, '\r');
         }
+        usart_send_blocking(USART1, *ptr);
         i++;
         ptr++;
     }
     return i;
-}
-
-int _close(int file) {
-    (void) file;
-    return -1;
-}
-
-int _fstat(int file, struct stat *st) {
-    (void) file;
-    (void) st;
-    return 0;
-}
-
-int _getpid(void) {
-    return 1;
-}
-
-int _isatty(int file) {
-    (void) file;
-    return 1;
-}
-
-int kill(int pid, int sig) {
-    (void) pid;
-    (void) sig;
-    errno = EINVAL;
-    return -1;
-}
-
-int _lseek(int file, int ptr, int dir) {
-    (void) file;
-    (void) ptr;
-    (void) dir;
-    return 0;
-}
-
-int _read(int file, char *ptr, int len) {
-    (void) file;
-    (void) ptr;
-    (void) len;
-    return 0;
-}
-
-/* This is often required for malloc/dynamic memory */
-void *_sbrk(ptrdiff_t incr) {
-    extern char end; /* Defined by the linker script */
-    static char *heap_end;
-    char *prev_heap_end;
-
-    if (heap_end == 0) {
-        heap_end = &end;
-    }
-
-    prev_heap_end = heap_end;
-    heap_end += incr;
-
-    return (void *) prev_heap_end;
 }

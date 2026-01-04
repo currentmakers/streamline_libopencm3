@@ -22,4 +22,7 @@ BINARY = timer1
 
 LDSCRIPT = ../sl_mcu_f407.ld
 
+OBJS += stubs.o
+
 include ../Makefile.include
+
